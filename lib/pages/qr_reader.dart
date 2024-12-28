@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class QrReader extends StatefulWidget {
@@ -153,6 +154,19 @@ class _QrReaderState extends State<QrReader> {
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
+                IconButton(
+                    onPressed: () {
+                      // Paylaşılacak içerik
+                      String message =
+                          "Merhaba bu URL'yi paylaşmak istedim: $scannedUrl";
+
+                      // Cihazın paylaşım menüsünü açar
+                      Share.share(
+                        message,
+                        subject: 'URL Paylaşımı',
+                      );
+                    },
+                    icon: Icon(Icons.share))
               ],
 
               if (scannedUrl == null)

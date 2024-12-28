@@ -50,5 +50,10 @@
 
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>This app needs photos access to get QR code from photo library</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>QR kod dosyasını paylaşmak için fotoğraf galerinize erişime ihtiyacımız var.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>QR kodları oluşturmak ve taramak için kameraya erişime ihtiyacımız var.</string>
+
 	</dict>
 </plist>
