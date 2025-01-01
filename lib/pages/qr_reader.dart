@@ -61,12 +61,11 @@ class _QrReaderState extends State<QrReader> {
           )
         ],
       ),
-      body: Container(
-        decoration: const BoxDecoration(color: Colors.white),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center, 
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
@@ -166,7 +165,7 @@ class _QrReaderState extends State<QrReader> {
                         subject: 'URL Paylaşımı',
                       );
                     },
-                    icon: Icon(Icons.share))
+                    icon: const Icon(Icons.share))
               ],
 
               if (scannedUrl == null)
@@ -178,6 +177,9 @@ class _QrReaderState extends State<QrReader> {
                     textAlign: TextAlign.center,
                   ),
                 ),
+
+              // Bottom Spacer
+              const SizedBox(height: 100),
             ],
           ),
         ),
