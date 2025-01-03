@@ -29,76 +29,80 @@ class _QrCraeteState extends State<QrCraete> {
         ),
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: TextField(
-                onSubmitted: (value) {
-                  setState(() {
-                    qrData = value;
-                  });
-                },
-                decoration: InputDecoration(
-                  labelText: 'Enter Data',
-                  labelStyle: const TextStyle(color: Colors.teal),
-                  hintText: 'Type something to generate QR',
-                  hintStyle: TextStyle(color: Colors.teal[400]),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Colors.teal),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.teal[700]!),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            if (qrData != null && qrData!.isNotEmpty)
-              RepaintBoundary(
-                key: _qrKey,
-                child: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.teal[50],
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0, 4),
-                        blurRadius: 8,
-                      ),
-                    ],
-                  ),
-                  child: PrettyQrView.data(
-                    data: qrData!,
-                    errorCorrectLevel: QrErrorCorrectLevel.H,
-                  ),
-                ),
-              ),
-            if (qrData == null || qrData!.isEmpty)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Text(
-                  'Please enter some text to generate QR code',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            const SizedBox(height: 20),
-            IconButton(
-              onPressed: () async {
-                if (qrData != null && qrData!.isNotEmpty) {
-                  await _shareQrImage();
-                }
+      body: _buildBody(),
+    );
+  }
+
+  Center _buildBody() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TextField(
+              onSubmitted: (value) {
+                setState(() {
+                  qrData = value;
+                });
               },
-              icon: const Icon(Icons.share),
+              decoration: InputDecoration(
+                labelText: 'Enter Data',
+                labelStyle: const TextStyle(color: Colors.teal),
+                hintText: 'Type something to generate QR',
+                hintStyle: TextStyle(color: Colors.teal[400]),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: Colors.teal),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.teal[700]!),
+                ),
+              ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 30),
+          if (qrData != null && qrData!.isNotEmpty)
+            RepaintBoundary(
+              key: _qrKey,
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.teal[50],
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 4),
+                      blurRadius: 8,
+                    ),
+                  ],
+                ),
+                child: PrettyQrView.data(
+                  data: qrData!,
+                  errorCorrectLevel: QrErrorCorrectLevel.H,
+                ),
+              ),
+            ),
+          if (qrData == null || qrData!.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                'Please enter some text to generate QR code',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          const SizedBox(height: 20),
+          IconButton(
+            onPressed: () async {
+              if (qrData != null && qrData!.isNotEmpty) {
+                await _shareQrImage();
+              }
+            },
+            icon: const Icon(Icons.share),
+          ),
+        ],
       ),
     );
   }

@@ -61,30 +61,40 @@ class _QrReaderState extends State<QrReader> {
           )
         ],
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, 
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Scan a QR code to retrieve its data:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.teal,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
+      body: _buildBody(),
+    );
+  }
 
-              // QR Scanner
+  Center _buildBody() {
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, 
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Scan a QR code to retrieve its data:',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.teal,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+
+            // QR Scanner
+            _buildQR(),
+            const SizedBox(height: 20),
+
+            // Scanned URL Display and Open Button
+            if (scannedUrl != null) ...[
               Container(
-                height: 500,
+                padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.1),
@@ -93,97 +103,95 @@ class _QrReaderState extends State<QrReader> {
                     ),
                   ],
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: MobileScanner(
-                    controller: MobileScannerController(
-                        detectionSpeed: DetectionSpeed.noDuplicates),
-                    onDetect: (capture) {
-                      final List<Barcode> barcodes = capture.barcodes;
-                      if (barcodes.isNotEmpty) {
-                        final rawUrl = barcodes.first.rawValue ?? "";
-                        final validatedUrl = validateUrl(rawUrl);
-
-                        setState(() {
-                          scannedUrl = validatedUrl;
-                        });
-                      }
-                    },
+                child: Text(
+                  scannedUrl!,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 20),
-
-              // Scanned URL Display and Open Button
-              if (scannedUrl != null) ...[
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal,
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Text(
-                    scannedUrl!,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () => _launchUrl(scannedUrl!),
-                  child: const Text(
-                    'Open URL',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
+                onPressed: () => _launchUrl(scannedUrl!),
+                child: const Text(
+                  'Open URL',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
-                IconButton(
-                    onPressed: () {
-                      // Paylaşılacak içerik
-                      String message =
-                          "Merhaba bu URL'yi paylaşmak istedim: $scannedUrl";
+              ),
+              IconButton(
+                  onPressed: () {
+                    // Paylaşılacak içerik
+                    String message =
+                        "Merhaba bu URL'yi paylaşmak istedim: $scannedUrl";
 
-                      // Cihazın paylaşım menüsünü açar
-                      Share.share(
-                        message,
-                        subject: 'URL Paylaşımı',
-                      );
-                    },
-                    icon: const Icon(Icons.share))
-              ],
-
-              if (scannedUrl == null)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Text(
-                    'No QR code scanned yet.',
-                    style: TextStyle(color: Colors.black),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-
-              // Bottom Spacer
-              const SizedBox(height: 100),
+                    // Cihazın paylaşım menüsünü açar
+                    Share.share(
+                      message,
+                      subject: 'URL Paylaşımı',
+                    );
+                  },
+                  icon: const Icon(Icons.share))
             ],
-          ),
+
+            if (scannedUrl == null)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Text(
+                  'No QR code scanned yet.',
+                  style: TextStyle(color: Colors.black),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+
+            // Bottom Spacer
+            const SizedBox(height: 100),
+          ],
         ),
       ),
     );
+  }
+
+  Container _buildQR() {
+    return Container(
+            height: 500,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: MobileScanner(
+                controller: MobileScannerController(
+                    detectionSpeed: DetectionSpeed.noDuplicates),
+                onDetect: (capture) {
+                  final List<Barcode> barcodes = capture.barcodes;
+                  if (barcodes.isNotEmpty) {
+                    final rawUrl = barcodes.first.rawValue ?? "";
+                    final validatedUrl = validateUrl(rawUrl);
+
+                    setState(() {
+                      scannedUrl = validatedUrl;
+                    });
+                  }
+                },
+              ),
+            ),
+          );
   }
 }
